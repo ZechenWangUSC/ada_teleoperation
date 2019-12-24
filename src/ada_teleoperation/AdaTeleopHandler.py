@@ -4,7 +4,7 @@ import time
 import copy
 
 from input_handlers.UserInputListener import UserInputData
-from input_handlers import KinovaJoystickListener, HydraListener, MouseJoystickListener
+from input_handlers import KinovaJoystickListener, MouseJoystickListener
 #from HydraListener import *
 from RobotState import *
 from DataRecordingUtils import *
@@ -67,7 +67,8 @@ class AdaTeleopHandler:
       elif teleop_interface == kinova_joy_interface_name:
         self.joystick_listener = KinovaJoystickListener()
       elif teleop_interface == hydra_interface_name:
-        self.joystick_listener = HydraListener()
+        pass
+#        self.joystick_listener = HydraListener()
       else:
         raise Exception('Teleop interface not specified. Please specify one of: ' + str(possible_teleop_interface_names))
        

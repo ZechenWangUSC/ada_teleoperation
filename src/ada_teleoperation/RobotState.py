@@ -61,8 +61,14 @@ class Action(object):
   no_mode_switch=-1
   no_move = np.zeros(6)
   #no_finger_vel = np.zeros(2)
-  def __init__(self, twist=copy.copy(no_move), finger_vel=None, switch_mode_to=no_mode_switch):
-    self.twist = twist
+  def __init__(self, twist=None, finger_vel=None, switch_mode_to=-1):
+    #print "Constructor!"
+    #print "twist: " + str(twist)
+    if twist is None:
+      self.twist = np.zeros(6)
+    else:
+      self.twist = twist
+    #print "self.twist: " + str(self.twist)
     if finger_vel is None:
       self.finger_vel = Action.no_finger_vel
     else:

@@ -1,3 +1,2 @@
 from KinovaJoystickListener import KinovaJoystickListener
-from HydraListener import HydraListener
 from MouseJoystickListener import MouseJoystickListener

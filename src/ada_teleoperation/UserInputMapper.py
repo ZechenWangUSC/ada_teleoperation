@@ -4,7 +4,7 @@ import numpy as np
 from input_handlers.UserInputListener import UserInputData
 #from HydraListener import *
 from RobotState import *
-from input_handlers import KinovaJoystickListener, HydraListener, MouseJoystickListener, UserInputListener
+from input_handlers import KinovaJoystickListener, MouseJoystickListener, UserInputListener
 
 finger_weighting = 0.2
 
@@ -24,6 +24,9 @@ class UserInputMapper(object):
       return action_to_ret
     
     curr_robot_mode = robot_state.mode
+    #if curr_robot_mode == 0:
+    #  from IPython import embed
+    #  embed()
     #if we are in the first few modes, it is a end effector velocity command
     if curr_robot_mode < self.num_motion_modes:
       if self.num_motion_modes == 2:
