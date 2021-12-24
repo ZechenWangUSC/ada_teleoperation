@@ -3,6 +3,7 @@ import numpy as np
 import time
 import copy
 import os
+import math
 
 from input_handlers.UserInputListener import UserInputData
 from input_handlers import KinovaJoystickListener, HydraListener, MouseJoystickListener
@@ -95,10 +96,29 @@ class AdaTeleopHandler:
   def ExecuteAction(self, action):
     self.robot_state.mode = self.robot_state.mode_after_action(action)
 
-    self.execute_twist(action.twist)
+    # update twist
+    twist = self.twist_blend_sin(action.twist)
+    #action.twist = twist
+
+    self.execute_twist(twist)
     #state_after = self.robot_state.state_after_action(action, 1.0)
     #self.execute_twist_to_transform(state_after.ee_trans)
     self.execute_finger_velocities(action.finger_vel)
+
+  def twist_blend_sin(self, twist):
+      # simulate a sine-like motion for manipulator
+      time_elapsed = time.time() - self.start_time
+      # y axis / period: 20s
+      if time_elapsed % 40 < 20:
+        twist[1] = twist[1] + 0.05
+      else:
+        twist[1] = twist[1] - 0.05
+      # x axis  / period: 2 pi
+      vel = math.sin((time_elapsed%(2*math.pi))) * 0.15
+      twist[0] = twist[0] - vel
+
+      return twist
+
 
 
   def execute_twist_to_transform(self, target_trans, magnitude=1.):
