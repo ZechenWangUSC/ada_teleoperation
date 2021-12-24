@@ -2,6 +2,7 @@ import rospy
 import numpy as np
 import time
 import copy
+import os
 
 from input_handlers.UserInputListener import UserInputData
 from input_handlers import KinovaJoystickListener, HydraListener, MouseJoystickListener
@@ -40,8 +41,8 @@ class AdaTeleopHandler:
 #      self.params = {'rand_start_radius':0.04,
 #             'noise_pwr': 0.3,  # magnitude of noise
 #             'vel_scale': 4.,   # scaling when sending velocity commands to robot
-#             'max_alpha': 0.6}  # maximum blending alpha value blended robot policy 
-
+#             'max_alpha': 0.6}  # maximum blending alpha value blended robot policy
+      self.start_time = time.time()
       self.env = env
       self.robot = robot
 
@@ -109,8 +110,19 @@ class AdaTeleopHandler:
   def execute_twist(self, twist):
     #jointVels, twist_opt = prpy.util.ComputeJointVelocityFromTwist(self.robot, twist, objective=weightedQuadraticObjective)
     jointVels, twist_opt = prpy.util.ComputeJointVelocityFromTwist(self.robot, twist)
+    self.save_vels(jointVels, twist)
+
     return self.execute_joint_velocities(jointVels)
 
+  def save_vels(self, jointVels, twist):
+      # saves the joints' velocities and x/y twist into a text file
+      with open('.//ros_ws//teleopData.txt', 'a') as file:
+          file.write("{:8.5f} ".format(time.time() - self.start_time))
+          for i in range(2):
+              file.write("{: .7f}  ".format(twist[i]))
+          for vel in jointVels:
+              file.write("{: .5f} ".format(vel))
+          file.write("\n")
 
   def execute_joint_velocities(self, joint_velocities):
     #make sure in velocity is in limits

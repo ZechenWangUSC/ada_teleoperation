@@ -75,6 +75,10 @@ if __name__ == "__main__":
 
     env,robot = Initialize_Adapy(args)
     Reset_Robot(robot)
+    with open('.//ros_ws//teleopData.txt', 'w') as file:
+        file.write("{:10s}{:12s}{:12s}{:9s}{:9s}{:9s}{:9s}{:9s}{:9s}\n".format(
+            " time", "twist_x_lin", "twist_y_lin","joint 0", "joint 1", "joint 2",
+            "joint 3", "joint 4", "joint 5"))
     ada_teleop = AdaTeleopHandler(env, robot, args.input_interface_name, args.num_input_dofs)
     ada_teleop.ExecuteDirectTeleop()
 
